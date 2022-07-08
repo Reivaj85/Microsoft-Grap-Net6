@@ -11,8 +11,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IGroup, GroupService>();
+builder.Services.AddSingleton<IGroup, GroupService>();
 
+//Add this configuration for using the secrets option
 builder.Configuration.AddEnvironmentVariables()
     .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 

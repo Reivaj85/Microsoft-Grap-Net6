@@ -19,4 +19,8 @@
       <Compile Remove="Controllers\WeatherForecastController.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Domain" />
+    </ItemGroup>
+
 </Project>

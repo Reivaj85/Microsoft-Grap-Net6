@@ -21,15 +21,14 @@ internal class MGrapProxy {
     }
 
     private void InitClient() {
+        if (GraphServiceClient != null) return;
         // using Azure.Identity;
-        var options = new TokenCredentialOptions
-        {
+        var options = new TokenCredentialOptions {
             AuthorityHost = AzureAuthorityHosts.AzurePublicCloud
         };
-        
+
         // https://docs.microsoft.com/dotnet/api/azure.identity.clientsecretcredential
-        var clientSecretCredential = new ClientSecretCredential(
-            _tenantId, _clientId, _clientSecret, options);
+        var clientSecretCredential = new ClientSecretCredential(_tenantId, _clientId, _clientSecret, options);
 
         GraphServiceClient = new GraphServiceClient(clientSecretCredential, _scopes);
     }
