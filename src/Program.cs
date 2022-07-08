@@ -1,3 +1,4 @@
+using System.Reflection;
 using POC_MGrap.Domain;
 using POC_MGrap.Infrastructure;
 
@@ -11,6 +12,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IGroup, GroupService>();
+
+builder.Configuration.AddEnvironmentVariables()
+    .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
 
 WebApplication app = builder.Build();
 
