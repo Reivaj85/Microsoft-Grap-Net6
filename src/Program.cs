@@ -1,6 +1,6 @@
 using System.Reflection;
-using POC_MGrap.Domain;
-using POC_MGrap.Infrastructure;
+using POC_MGrap.Services;
+using POC_MGrap.Services.Interfaces;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddSingleton<IGroup, GroupService>();
 

@@ -1,25 +1,37 @@
+using AutoMapper;
 using Microsoft.Graph;
-using POC_MGrap.Domain;
+using POC_MGrap.Domain.DTO;
+using POC_MGrap.Infrastructure;
+using POC_MGrap.Services.Interfaces;
 
-namespace POC_MGrap.Infrastructure;
+namespace POC_MGrap.Services;
 internal class GroupService : MGrapProxy, IGroup {
-    public GroupService(IConfiguration configuration) : base(configuration) {
+    private readonly IMapper _mapper;
+
+    public GroupService(IConfiguration configuration, IMapper mapper ) : base(configuration) {
+        _mapper = mapper;
     }
     
-    public async Task<IGraphServiceGroupsCollectionPage?> GetAllowedGroups() {
+    public async Task<IEnumerable<GroupDto>> GetAllowedGroups() {
         var queryOptions = new List<QueryOption>()
         {
             new("$count", "true")
         };
-        
-        return await GraphServiceClient?.Groups
-            .Request( queryOptions )
+
+        IEnumerable<Group>? groups = await GraphServiceClient?.Groups.Request(queryOptions)
             .Filter("startswith(displayName, 'PHZone')")
-            .Select("id,displayName")
+            .Select(g => new {
+                g.Id,
+                g.DisplayName,
+                g.Description,
+                g.Mail
+            })
             .GetAsync()!;
+        return _mapper.Map<IEnumerable<Group>,IEnumerable<GroupDto>>(groups);
     }
 
-    public async Task<IGraphServiceGroupsCollectionPage?> GetByName(string name) {
-        return await GraphServiceClient?.Groups.Request().Filter($"displayName eq '{ name }'").GetAsync()!;
+    public async Task<IEnumerable<GroupDto>> GetByName(string name) {
+        IEnumerable<Group>? group = await GraphServiceClient?.Groups.Request().Filter($"displayName eq '{ name }'").GetAsync()!;
+        return _mapper.Map<IEnumerable<Group>,IEnumerable<GroupDto>>(group);
     }
 }

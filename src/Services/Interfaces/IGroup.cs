@@ -1,7 +1,7 @@
-namespace POC_MGrap.Domain;
+using POC_MGrap.Domain.DTO;
 
-using Microsoft.Graph;
+namespace POC_MGrap.Services.Interfaces;
 public interface IGroup  {
-    Task<IGraphServiceGroupsCollectionPage?> GetAllowedGroups();
-    Task<IGraphServiceGroupsCollectionPage?> GetByName(string name);
+    Task<IEnumerable<GroupDto>> GetAllowedGroups();
+    Task<IEnumerable<GroupDto>> GetByName(string name);
 }

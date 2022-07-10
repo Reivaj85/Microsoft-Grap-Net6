@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Graph;
-using POC_MGrap.Domain;
+using POC_MGrap.Domain.DTO;
+using POC_MGrap.Services.Interfaces;
 
 namespace POC_MGrap.Controllers; 
 
@@ -15,7 +15,7 @@ public class GroupsController : ControllerBase {
     
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] string? name) {
-        IGraphServiceGroupsCollectionPage? groups = string.IsNullOrEmpty(name)
+        IEnumerable<GroupDto> groups = string.IsNullOrEmpty(name)
             ? await _group.GetAllowedGroups() 
             : await _group.GetByName(name);
         return Ok( groups );
