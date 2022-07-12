@@ -6,14 +6,14 @@ using POC_MGrap.Services.Interfaces;
 namespace POC_MGrap.Infrastructure;
 
 // ReSharper disable once IdentifierTypo
-internal class MGrapProxy : IGatewayData {
+internal class MicrosoftGrapProxy : IGatewayData {
     private readonly string? _tenantId;
     private readonly string? _clientId;
     private readonly string? _clientSecret;
     private readonly string[]? _scopes;
     protected GraphServiceClient? GraphServiceClient { get; private set; }
 
-    protected MGrapProxy(IConfiguration configuration) {
+    protected MicrosoftGrapProxy(IConfiguration configuration) {
         _scopes = configuration["AzureServicePrincipalSettings:Scopes"]?.Split(",");
         _tenantId = configuration["AzureServicePrincipalSettings:TenantID"];
         _clientId = configuration["AzureServicePrincipalSettings:ClientID"];

@@ -5,7 +5,7 @@ using POC_MGrap.Infrastructure;
 using POC_MGrap.Services.Interfaces;
 
 namespace POC_MGrap.Services;
-internal class GroupService : MGrapProxy, IGroup {
+internal class GroupService : MicrosoftGrapProxy, IGroup {
     private readonly IMapper _mapper;
 
     public GroupService(IConfiguration configuration, IMapper mapper ) : base(configuration) {
@@ -33,5 +33,17 @@ internal class GroupService : MGrapProxy, IGroup {
     public async Task<IEnumerable<GroupDto>> GetByName(string name) {
         IEnumerable<Group>? group = await GraphServiceClient?.Groups.Request().Filter($"displayName eq '{ name }'").GetAsync()!;
         return _mapper.Map<IEnumerable<Group>,IEnumerable<GroupDto>>(group);
+    }
+
+    public async Task<IEnumerable<GroupDto>> GetStartWithByName(string likeName) {
+        var queryOptions = new List<QueryOption> {
+            new("$count", "true")
+        };
+
+        IEnumerable<Group>? groups = await GraphServiceClient?.Groups.Request(queryOptions).Filter($"startswith(displayName, '{ likeName }')").Select(g => new {
+            g.Id, g.DisplayName, g.Description, g.Mail
+        }).GetAsync()!;
+        
+        return _mapper.Map<IEnumerable<Group>,IEnumerable<GroupDto>>(groups);
     }
 }
