@@ -1,11 +1,12 @@
 using Azure.Identity;
 using Microsoft.Graph;
+using POC_MGrap.Services.Interfaces;
 
 // ReSharper disable once IdentifierTypo
 namespace POC_MGrap.Infrastructure;
 
 // ReSharper disable once IdentifierTypo
-internal class MGrapProxy {
+internal class MGrapProxy : IGatewayData {
     private readonly string? _tenantId;
     private readonly string? _clientId;
     private readonly string? _clientSecret;
@@ -17,10 +18,10 @@ internal class MGrapProxy {
         _tenantId = configuration["AzureServicePrincipalSettings:TenantID"];
         _clientId = configuration["AzureServicePrincipalSettings:ClientID"];
         _clientSecret = configuration["AzureServicePrincipalSettings:ClientSecret"];
-        InitClient();
+        Connect();
     }
 
-    private void InitClient() {
+    public void Connect() {
         if (GraphServiceClient != null) return;
         // using Azure.Identity;
         var options = new TokenCredentialOptions {
